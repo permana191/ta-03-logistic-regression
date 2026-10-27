@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiskGuard Pro - Sigit Miraj Permana</title>
+    
+    <!-- Fonts, Icons, dan Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR KIRI -->
+    <aside class="w-64 bg-[#1e293b] text-slate-300 flex flex-col h-full shrink-0 shadow-xl z-20">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-slate-700/50 bg-[#0f172a]">
+            <i class="fa-solid fa-chart-line text-blue-500 text-xl mr-3"></i>
+            <span class="text-white font-bold text-lg tracking-wide">RiskGuard<span class="text-blue-500">Pro</span></span>
+        </div>
+
+        <!-- Menu Navigasi -->
+        <nav class="flex-1 px-4 py-6 space-y-8 overflow-y-auto">
+            <div>
+                <p class="text-xs font-semibold text-slate-500 mb-3 tracking-wider">MENU UTAMA</p>
+                <ul class="space-y-1">
+                    <li>
+                        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center px-3 py-2.5 bg-blue-600 text-white rounded-lg transition-colors text-sm font-medium">
+                            <i class="fa-solid fa-gauge-high w-6"></i> Dashboard Analisis
+                        </button>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center px-3 py-2.5 hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium">
+                            <i class="fa-solid fa-clock-rotate-left w-6"></i> Riwayat Prediksi
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center px-3 py-2.5 hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium">
+                            <i class="fa-solid fa-file-pdf w-6"></i> Laporan Batch
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <p class="text-xs font-semibold text-slate-500 mb-3 tracking-wider">SISTEM</p>
+                <ul class="space-y-1">
+                    <li>
+                        <!-- Tombol SMOTE -->
+                        <button onclick="switchTab('smote')" id="nav-smote" class="w-full flex items-center px-3 py-2.5 hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium">
+                            <i class="fa-solid fa-database w-6"></i> Model ML (SMOTE)
+                        </button>
+                    </li>
+                    <li>
+                        <a href="#" class="flex items-center px-3 py-2.5 hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium">
+                            <i class="fa-solid fa-gear w-6"></i> Pengaturan
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Profil Bawah (Nama Anda) -->
+        <div class="p-4 border-t border-slate-700/50 bg-[#0f172a] flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold shadow-lg">
+                SP
+            </div>
+            <div class="overflow-hidden">
+                <p class="text-sm font-bold text-white truncate">Sigit Miraj Permana</p>
+                <p class="text-xs text-slate-400 truncate">Data Scientist / Analis Risiko</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- AREA KONTEN UTAMA -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden">
+        
+        <!-- Topbar -->
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-8 shrink-0 z-10">
+            <div class="relative w-96">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" placeholder="Cari ID Perusahaan atau Laporan..." class="w-full pl-10 pr-4 py-2 bg-slate-100 border-transparent rounded-full text-sm focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none">
+            </div>
+            <div class="flex items-center gap-6">
+                <button class="text-slate-400 hover:text-blue-600 relative">
+                    <i class="fa-regular fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+                <div class="h-6 w-px bg-slate-200"></div>
+                <button class="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar
+                </button>
+            </div>
+        </header>
+
+        <!-- Konten Berubah (Scrollable) -->
+        <main class="flex-1 overflow-y-auto p-8 relative">
+            
+            <!-- ========================================== -->
+            <!-- TAB 1: DASHBOARD ANALISIS                  -->
+            <!-- ========================================== -->
+            <div id="view-dashboard" class="fade-in block">
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold text-slate-800">Evaluasi Risiko Kebangkrutan</h1>
+                    <p class="text-sm text-slate-500 mt-1">Masukkan rasio finansial kuartalan untuk menganalisis probabilitas gagal bayar menggunakan model Regresi Logistik.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    
+                    <!-- Form Input (Kiri) -->
+                    <div class="lg:col-span-4 bg-white rounded-xl shadow-sm border border-slate-200 p-6 h-fit">
+                        <h2 class="text-base font-bold text-slate-800 mb-5 flex items-center gap-2">
+                            <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-file-invoice-dollar"></i></span>
+                            Parameter Finansial
+                        </h2>
+
+                        <form action="/predict" method="POST" id="predictForm" class="space-y-4">
+                            <!-- Input 1 -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1 flex justify-between">
+                                    ROA(C) (Bunga & Penyusutan) <i class="fa-solid fa-circle-info text-slate-400"></i>
+                                </label>
+                                <input type="number" step="any" name="roa" required value="{{ form_data.roa if form_data else '' }}"
+                                    class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50 focus:bg-white text-sm">
+                            </div>
+
+                            <!-- Input 2 -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1 flex justify-between">
+                                    Debt Ratio % <i class="fa-solid fa-circle-info text-slate-400"></i>
+                                </label>
+                                <input type="number" step="any" name="debt_ratio" id="val_debt" required value="{{ form_data.debt_ratio if form_data else '' }}"
+                                    class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50 focus:bg-white text-sm">
+                            </div>
+
+                            <!-- Input 3 -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1 flex justify-between">
+                                    Net Income to Total Assets <i class="fa-solid fa-circle-info text-slate-400"></i>
+                                </label>
+                                <input type="number" step="any" name="net_income" id="val_profit" required value="{{ form_data.net_income if form_data else '' }}"
+                                    class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50 focus:bg-white text-sm">
+                            </div>
+
+                            <!-- Input 4 -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1 flex justify-between">
+                                    Working Capital / Assets <i class="fa-solid fa-circle-info text-slate-400"></i>
+                                </label>
+                                <input type="number" step="any" name="working_capital" required value="{{ form_data.working_capital if form_data else '' }}"
+                                    class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50 focus:bg-white text-sm">
+                            </div>
+
+                            <!-- Input 5 -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1 flex justify-between">
+                                    Cash / Total Assets <i class="fa-solid fa-circle-info text-slate-400"></i>
+                                </label>
+                                <input type="number" step="any" name="cash_assets" id="val_cash" required value="{{ form_data.cash_assets if form_data else '' }}"
+                                    class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-slate-50 focus:bg-white text-sm">
+                            </div>
+
+                            <button type="submit" id="submitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-lg transition-colors flex items-center justify-center gap-2 mt-2 shadow-md shadow-blue-500/30 text-sm">
+                                <span id="btnText"><i class="fa-solid fa-microchip"></i> Analisis Data</span>
+                                <div id="btnSpinner" class="hidden h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Visualisasi Hasil (Kanan) -->
+                    <div class="lg:col-span-8 flex flex-col gap-6">
+                        
+                        <!-- Baris 1: Skor & Kesimpulan -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Gauge -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col items-center justify-center relative">
+                                <h3 class="text-xs font-bold text-slate-500 tracking-wider w-full text-left mb-2">SKOR PROBABILITAS RISIKO</h3>
+                                <div class="relative w-full max-w-[220px] mx-auto mt-2">
+                                    <canvas id="riskGauge"></canvas>
+                                    <div class="absolute bottom-2 left-0 right-0 text-center">
+                                        <span class="text-3xl font-bold {{ 'text-red-600' if status_class == 'danger' else 'text-emerald-500' }}">{{ probability | default(0) }}%</span>
+                                        <p class="text-[10px] text-slate-400 mt-1">Regresi Logistik Score</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Kesimpulan -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative overflow-hidden">
+                                <!-- Dekorasi Latar -->
+                                <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -z-0 opacity-50 {{ 'bg-red-50' if status_class == 'danger' else '' }}"></div>
+                                
+                                <h3 class="text-xs font-bold text-slate-500 tracking-wider mb-4 relative z-10">KESIMPULAN SISTEM</h3>
+                                
+                                {% if submitted %}
+                                    <div class="flex items-center gap-4 mb-4 relative z-10">
+                                        <div class="w-12 h-12 rounded-full flex items-center justify-center text-2xl {{ 'bg-red-100 text-red-600' if status_class == 'danger' else 'bg-emerald-100 text-emerald-500' }}">
+                                            <i class="fa-solid {{ 'fa-triangle-exclamation' if status_class == 'danger' else 'fa-check' }}"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-lg font-bold {{ 'text-red-600' if status_class == 'danger' else 'text-emerald-600' }}">
+                                                {{ 'Perusahaan Berisiko' if status_class == 'danger' else 'Perusahaan Aman' }}
+                                            </h4>
+                                            <p class="text-xs text-slate-500">{{ 'Struktur Finansial Kritis' if status_class == 'danger' else 'Struktur Finansial Sehat' }}</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-slate-600 leading-relaxed border-l-2 {{ 'border-red-400' if status_class == 'danger' else 'border-emerald-400' }} pl-3 relative z-10">
+                                        Berdasarkan klasifikasi model terhadap data historis, parameter keuangan perusahaan ini menunjukkan probabilitas risiko kebangkrutan sebesar {{ probability }}%. 
+                                    </p>
+                                {% else %}
+                                    <div class="flex flex-col items-center justify-center h-24 text-slate-400">
+                                        <i class="fa-solid fa-hourglass-empty text-2xl mb-2"></i>
+                                        <p class="text-xs">Menunggu input data...</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Baris 2: Mini Cards (Dinamis dari JS) -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Likuiditas -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-slate-500">Likuiditas</span>
+                                    <i class="fa-solid fa-droplet text-slate-400"></i>
+                                </div>
+                                <p id="ind-likuiditas" class="text-lg font-bold text-slate-800 mb-2">-</p>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div id="bar-likuiditas" class="h-full bg-slate-300 w-0"></div></div>
+                            </div>
+                            <!-- Beban Hutang -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-slate-500">Beban Hutang</span>
+                                    <i class="fa-solid fa-scale-unbalanced text-purple-400"></i>
+                                </div>
+                                <p id="ind-hutang" class="text-lg font-bold text-slate-800 mb-2">-</p>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div id="bar-hutang" class="h-full bg-slate-300 w-0"></div></div>
+                            </div>
+                            <!-- Profitabilitas -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-xs font-bold text-slate-500">Profitabilitas</span>
+                                    <i class="fa-solid fa-arrow-trend-up text-amber-400"></i>
+                                </div>
+                                <p id="ind-profit" class="text-lg font-bold text-slate-800 mb-2">-</p>
+                                <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div id="bar-profit" class="h-full bg-slate-300 w-0"></div></div>
+                            </div>
+                        </div>
+
+                        <!-- Baris 3: Radar Chart & Checklist -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Radar -->
+                            <div class="md:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                                <h3 class="text-xs font-bold text-slate-500 tracking-wider mb-4">PERBANDINGAN VS RATA-RATA INDUSTRI</h3>
+                                <div class="w-full h-[220px]">
+                                    <canvas id="radarChart"></canvas>
+                                </div>
+                            </div>
+                            <!-- Checklist -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                                <h3 class="text-xs font-bold text-slate-500 tracking-wider mb-4">TINDAKAN LANJUTAN</h3>
+                                <ul class="space-y-4 text-sm text-slate-600">
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                                        <span>Validasi model SMOTE diterapkan pada dataset imbalance.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-solid {{ 'fa-xmark text-red-500' if status_class == 'danger' else 'fa-check text-emerald-500' }} mt-0.5"></i>
+                                        <span>Pemeriksaan anomali (outlier) pada aliran kas bersih.</span>
+                                    </li>
+                                    <li class="flex items-start gap-3">
+                                        <i class="fa-regular fa-clock text-blue-500 mt-0.5"></i>
+                                        <span>Rekomendasi audit finansial mendalam (Q3).</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================== -->
+            <!-- TAB 2: MODEL ML (SMOTE) METRICS            -->
+            <!-- ========================================== -->
+            <div id="view-smote" class="fade-in hidden">
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold text-slate-800">Evaluasi Performa Model (SMOTE)</h1>
+                    <p class="text-sm text-slate-500 mt-1">Analisis teknis metrik klasifikasi setelah penerapan Synthetic Minority Over-sampling Technique.</p>
+                </div>
+
+                <!-- Info SMOTE -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl p-6 text-white mb-6 shadow-lg">
+                    <div class="flex items-center gap-4 mb-2">
+                        <i class="fa-solid fa-database text-3xl opacity-80"></i>
+                        <h2 class="text-xl font-bold">Penanganan Data Imbalance</h2>
+                    </div>
+                    <p class="text-blue-100 text-sm max-w-3xl leading-relaxed">
+                        Dataset asli memiliki tingkat kebangkrutan yang sangat rendah (~3%). Pelatihan model langsung akan menghasilkan <strong>False Negative</strong> yang tinggi. Teknik <strong>SMOTE</strong> digunakan untuk mensintesis data kelas minoritas pada tahap <em>training</em>, memaksa garis batas keputusan (Decision Boundary) Regresi Logistik menjadi lebih peka dalam mendeteksi ancaman nyata.
+                    </p>
+                </div>
+
+                <!-- Gambar Metrik dari Backend -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <!-- Confusion Matrix -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2 border-b pb-3">
+                            <i class="fa-solid fa-border-all text-blue-500"></i> Confusion Matrix
+                        </h3>
+                        <div class="flex justify-center bg-slate-50 rounded-lg p-2 border border-slate-100">
+                            <!-- Memanggil file gambar Figure_1.png yang disimpan train_model.py -->
+                            <img src="{{ url_for('static', filename='Figure_1.png') }}" alt="Confusion Matrix" class="max-w-full h-auto rounded mix-blend-multiply" onerror="this.src='https://placehold.co/500x350/f8fafc/64748b?text=Figure_1.png+Belum+Di-Generate'">
+                        </div>
+                        <p class="text-xs text-slate-500 mt-4 text-center">Fokus utama evaluasi adalah meminimalisir False Negative (Gagal mendeteksi kebangkrutan).</p>
+                    </div>
+
+                    <!-- ROC Curve -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2 border-b pb-3">
+                            <i class="fa-solid fa-chart-area text-blue-500"></i> Kurva ROC & Skor AUC
+                        </h3>
+                        <div class="flex justify-center bg-slate-50 rounded-lg p-2 border border-slate-100">
+                            <!-- Memanggil file gambar Figure_2.png -->
+                            <img src="{{ url_for('static', filename='Figure_2.png') }}" alt="ROC Curve" class="max-w-full h-auto rounded mix-blend-multiply" onerror="this.src='https://placehold.co/500x350/f8fafc/64748b?text=Figure_2.png+Belum+Di-Generate'">
+                        </div>
+                        <div class="mt-4 flex justify-between items-center bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">
+                            <span class="text-sm font-semibold text-blue-800">Area Under Curve (AUC)</span>
+                            <span class="text-lg font-bold text-blue-600">0.93 (Excellent)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Data Injeksi Flask -->
+    <script>
+        const isSubmitted = '{{ submitted }}' === 'True';
+        const riskProb = parseFloat('{{ probability | default(0) }}');
+        const statusClass = '{{ status_class | default("success") }}';
+        
+        const fd = {
+            roa: parseFloat('{{ form_data.roa if form_data else 0.5 }}'),
+            debt: parseFloat('{{ form_data.debt_ratio if form_data else 0.15 }}'),
+            profit: parseFloat('{{ form_data.net_income if form_data else 0.8 }}'),
+            work: parseFloat('{{ form_data.working_capital if form_data else 0.8 }}'),
+            cash: parseFloat('{{ form_data.cash_assets if form_data else 0.05 }}')
+        };
+    </script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Logika Interaksi UI -->
+    <script>
+        // 1. Sistem Tab Menu (Sidebar)
+        function switchTab(tabId) {
+            // Sembunyikan semua tab
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-smote').classList.add('hidden');
+            
+            // Reset warna menu sidebar
+            document.getElementById('nav-dashboard').className = "w-full flex items-center px-3 py-2.5 hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium text-slate-300";
+            document.getElementById('nav-smote').className = "w-full flex items-center px-3 py-2.5 hover:bg-slate-800 rounded-lg transition-colors text-sm font-medium text-slate-300";
+            
+            // Tampilkan tab aktif
+            document.getElementById('view-' + tabId).classList.remove('hidden');
+            document.getElementById('nav-' + tabId).className = "w-full flex items-center px-3 py-2.5 bg-blue-600 text-white rounded-lg transition-colors text-sm font-medium shadow-md shadow-blue-900/20";
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            
+            // 2. Efek Loading Tombol Form
+            const form = document.getElementById("predictForm");
+            if (form) {
+                form.addEventListener("submit", function () {
+                    document.getElementById("submitBtn").disabled = true;
+                    document.getElementById("btnText").style.display = "none";
+                    document.getElementById("btnSpinner").classList.remove("hidden");
+                });
+            }
+
+            // 3. Update Mini Cards Dinamis berdasarkan Input
+            if (isSubmitted) {
+                // Logika Likuiditas (Cash)
+                const indLik = document.getElementById('ind-likuiditas');
+                const barLik = document.getElementById('bar-likuiditas');
+                if (fd.cash < 0.03) { indLik.innerText = "Kritis"; indLik.className = "text-lg font-bold text-red-600 mb-2"; barLik.className = "h-full bg-red-500 w-[20%]"; }
+                else if (fd.cash < 0.08) { indLik.innerText = "Waspada"; indLik.className = "text-lg font-bold text-amber-500 mb-2"; barLik.className = "h-full bg-amber-400 w-[60%]"; }
+                else { indLik.innerText = "Aman"; indLik.className = "text-lg font-bold text-emerald-500 mb-2"; barLik.className = "h-full bg-emerald-500 w-[100%]"; }
+
+                // Logika Beban Hutang (Debt Ratio)
+                const indHut = document.getElementById('ind-hutang');
+                const barHut = document.getElementById('bar-hutang');
+                if (fd.debt > 0.25) { indHut.innerText = "Tinggi"; indHut.className = "text-lg font-bold text-red-600 mb-2"; barHut.className = "h-full bg-red-500 w-[90%]"; }
+                else if (fd.debt > 0.15) { indHut.innerText = "Wajar"; indHut.className = "text-lg font-bold text-blue-500 mb-2"; barHut.className = "h-full bg-blue-500 w-[50%]"; }
+                else { indHut.innerText = "Terkendali"; indHut.className = "text-lg font-bold text-purple-500 mb-2"; barHut.className = "h-full bg-purple-500 w-[20%]"; }
+
+                // Logika Profitabilitas (Net Income)
+                const indProf = document.getElementById('ind-profit');
+                const barProf = document.getElementById('bar-profit');
+                if (fd.profit < 0.6) { indProf.innerText = "Rendah"; indProf.className = "text-lg font-bold text-red-600 mb-2"; barProf.className = "h-full bg-red-500 w-[30%]"; }
+                else if (fd.profit < 0.8) { indProf.innerText = "Cukup"; indProf.className = "text-lg font-bold text-amber-500 mb-2"; barProf.className = "h-full bg-amber-400 w-[70%]"; }
+                else { indProf.innerText = "Baik"; indProf.className = "text-lg font-bold text-amber-500 mb-2"; barProf.className = "h-full bg-amber-500 w-[100%]"; }
+            }
+
+            // 4. Render Chart.js
+            if (isSubmitted && typeof Chart !== 'undefined') {
+                const gaugeColor = statusClass === 'danger' ? '#ef4444' : '#10b981'; 
+
+                // GAUGE CHART
+                new Chart(document.getElementById('riskGauge').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Risiko', 'Aman'],
+                        datasets: [{
+                            data: [riskProb, 100 - riskProb],
+                            backgroundColor: [gaugeColor, '#f1f5f9'],
+                            borderWidth: 0, borderRadius: [10, 0]
+                        }]
+                    },
+                    options: {
+                        rotation: -90, circumference: 180, cutout: '75%',
+                        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                        maintainAspectRatio: false
+                    }
+                });
+
+                // RADAR CHART
+                new Chart(document.getElementById('radarChart').getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['ROA(C)', 'Debt Ratio', 'Net Income', 'Working Cap', 'Cash'],
+                        datasets: [
+                            {
+                                label: 'Input Saat Ini',
+                                data: [fd.roa, fd.debt, fd.profit, fd.work, fd.cash],
+                                backgroundColor: 'rgba(37, 99, 235, 0.2)', borderColor: 'rgba(37, 99, 235, 1)', borderWidth: 2
+                            },
+                            {
+                                label: 'Rata-rata Aman',
+                                data: [0.55, 0.10, 0.85, 0.80, 0.15],
+                                backgroundColor: 'transparent', borderColor: 'rgba(16, 185, 129, 0.5)', borderDash: [5, 5], borderWidth: 1.5
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: { r: { ticks: { display: false } } },
+                        plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } },
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
